@@ -1,0 +1,8 @@
+{
+	"name" : "shippa/sdk",
+	"autoload" : {
+        "psr-4": {
+            "Shippa\\" : "src"
+        }
+	}
+}
