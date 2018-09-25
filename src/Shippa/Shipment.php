@@ -314,20 +314,12 @@ abstract class Shipment
         curl_close ($ch);
         $obj = json_decode($server_output);
 
-        if($obj->status == "error") {
-            throw new \Exception("Shipment failed: ".$obj->message);
-        } else if( empty($obj->tracking_number) ) {
-            throw new \Exception("Shippa Error - No tracking number returned: " . $obj->message);
-        }
-
-        return $obj;
+        return $obj->label;
 
 	}
 
 	public function getLocations($country_code, $postcode)
 	{
-
-
         $headers = array(
             'Authorization: Bearer ' . $this->api_key,
             'Content-Type: application/json',

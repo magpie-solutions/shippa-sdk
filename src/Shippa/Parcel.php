@@ -22,7 +22,7 @@ class Parcel
 
 	public function calculateSize($country_to_code = "GB", $country_from_code = "GB")
 	{
-
+		return 0;
 	}
 
 }
