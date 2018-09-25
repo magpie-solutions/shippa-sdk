@@ -4,7 +4,7 @@ namespace Shippa\Carrier;
 
 use Shippa\Shipment;
 
-class Pallex extends Shipment
+class Demo extends Shipment
 {
 
 	private	$collection_delivery_keys = [
@@ -24,7 +24,7 @@ class Pallex extends Shipment
 
 	public function __construct($key) {
 		parent::__construct($key);
-		$this->setCarrier('pallex');
+		$this->setCarrier('demo');
 	}
 
 	public function validateShipment()

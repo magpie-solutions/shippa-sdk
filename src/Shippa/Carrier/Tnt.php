@@ -27,10 +27,10 @@ class Tnt extends Shipment
 		$this->setCarrier('tnt');
 	}
 
-	public function validateBooking()
+	public function validateShipment()
 	{
 
-		parent::validateBooking();
+		parent::validateShipment();
 
 		foreach($this->collection_delivery_keys as $key => $required) {
 			if($required && empty($this->collection[$key])) {
