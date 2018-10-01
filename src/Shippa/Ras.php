@@ -28,7 +28,7 @@ class Ras
 	public function getRas($country_code, $postcode, $carrier = '')
 	{
 		if(!$this->url) {
-			throw new Exception("No API Url set", 500);
+			throw new \Exception("No API Url set", 500);
 		}
 		$url = $this->url;
 

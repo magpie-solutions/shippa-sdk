@@ -80,7 +80,7 @@ class Quote
 	public function doQuote()
 	{
 		if(!$this->url) {
-			throw new Exception("No API Url set", 500);
+			throw new \Exception("No API Url set", 500);
 		}
 		$quote = [
 			'full' => 1,

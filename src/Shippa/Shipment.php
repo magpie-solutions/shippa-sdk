@@ -142,7 +142,7 @@ abstract class Shipment
 	public function doShipmentCreate()
 	{
 		if(!$this->url) {
-			throw new Exception("No API Url set", 500);
+			throw new \Exception("No API Url set", 500);
 		}
 		$this->validateShipment();
 
@@ -217,7 +217,7 @@ abstract class Shipment
 	public function getLabel($tracking_number = null)
 	{
 		if(!$this->url) {
-			throw new Exception("No API Url set", 500);
+			throw new \Exception("No API Url set", 500);
 		}
 		if(!empty($this->label)) {
 			return $this->label;
@@ -263,7 +263,7 @@ abstract class Shipment
 	public function getTracking($tracking_number = null)
 	{
 		if(!$this->url) {
-			throw new Exception("No API Url set", 500);
+			throw new \Exception("No API Url set", 500);
 		}
 		if(empty($this->tracking_number)) {
 			$this->tracking_number = $tracking_number;
@@ -309,7 +309,7 @@ abstract class Shipment
 	public function doShipmentCancel($tracking_number = null)
 	{
 		if(!$this->url) {
-			throw new Exception("No API Url set", 500);
+			throw new \Exception("No API Url set", 500);
 		}
 		if(empty($this->tracking_number)) {
 			$this->tracking_number = $tracking_number;
@@ -339,7 +339,7 @@ abstract class Shipment
 	public function getLocations($country_code, $postcode)
 	{
 		if(!$this->url) {
-			throw new Exception("No API Url set", 500);
+			throw new \Exception("No API Url set", 500);
 		}
         $headers = array(
             'Authorization: Bearer ' . $this->api_key,
