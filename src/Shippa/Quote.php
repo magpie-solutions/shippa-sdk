@@ -14,12 +14,19 @@ class Quote
 				$items = [],
 				$api_key,
 				$quoted,
-				$error = false;
+				$error = false,
+				$url = null;
 
-	public function __construct($key = '')
+	public function __construct($key = '', $api_url = null)
 	{
 		if($key) {
 			$this->api_key = $key;
+		}
+
+		if($api_url) {
+			$this->url = $api_url;
+		} else if(defined('SHIPPA_API_URL')) {
+			$this->url = SHIPPA_API_URL;
 		}
 	}
 
@@ -84,7 +91,7 @@ class Quote
 
 
 		$c = curl_init();
-		curl_setopt($c, CURLOPT_URL, 'http://api.shippa.mp/quote');
+		curl_setopt($c, CURLOPT_URL, $this->url . '/quote');
 		curl_setopt($c, CURLOPT_POST, 1);
 		curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($quote));
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);

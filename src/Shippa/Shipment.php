@@ -27,13 +27,19 @@ abstract class Shipment
 				$order_number,
 				$customs_data = [],
 				$tracking_number,
-				$url = 'http://api.shippa.test/',
-				$label = null;
+				$label = null,
+				$url = null;
 
-	protected function __construct($key = '')
+	protected function __construct($key = '', $api_url = null)
 	{
 		if($key) {
 			$this->api_key = $key;
+		}
+
+		if($api_url) {
+			$this->url = $api_url;
+		} else if(defined('SHIPPA_API_URL')) {
+			$this->url = SHIPPA_API_URL;
 		}
 	}
 

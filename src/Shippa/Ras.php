@@ -8,19 +8,26 @@ class Ras
 	protected 	$ras_fetch = false,
 				$api_key = null,
 				$ras_type = false,
-				$ras_carrier_data = [];
+				$ras_carrier_data = [],
+				$url = null;
 
-	public function __construct($key = '')
+	public function __construct($key = '', $api_url = null)
 	{
 		if($key) {
 			$this->api_key = $key;
+		}
+
+		if($api_url) {
+			$this->url = $api_url;
+		} else if(defined('SHIPPA_API_URL')) {
+			$this->url = SHIPPA_API_URL;
 		}
 	}
 
 
 	public function getRas($country_code, $postcode, $carrier = '')
 	{
-		$url = "http://api.shippa.test/";
+		$url = $this->url;
 
 		if($carrier) {
 			$url .= "/{$carrier}";
