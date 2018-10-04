@@ -109,7 +109,7 @@ class Quote
 
 		$ret_json = json_decode($ret);
 
-		if(!empty($ret_json->services)) {
+		if(isset($ret_json->services)) {
 			$this->quoted = $ret_json->services;
 		} else {
 			$this->error = $ret_json->message;
