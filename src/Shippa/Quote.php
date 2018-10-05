@@ -112,7 +112,7 @@ class Quote
 		if(isset($ret_json->services)) {
 			$this->quoted = $ret_json->services;
 		} else {
-			$this->error = $ret_json->message;
+			$this->error = $ret_json->code;
 		}
 
 		return $this;
