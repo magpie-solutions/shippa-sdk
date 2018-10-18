@@ -15,7 +15,9 @@ class Quote
 				$api_key,
 				$quoted,
 				$error = false,
-				$url = null;
+				$url = null,
+				$service_reference = null,
+				$url_end_point = '/quote';
 
 	public function __construct($key = '', $api_url = null)
 	{
@@ -33,6 +35,13 @@ class Quote
 	public function setShipmentType($type)
 	{
 		$this->shipment_type = $type;
+		return $this;
+	}
+
+	public function setServiceReference($code)
+	{
+		$this->service_reference = $code;
+		$this->url_end_point = '/quote/service';
 		return $this;
 	}
 
@@ -92,9 +101,13 @@ class Quote
 			'items' => $this->items
 		];
 
+		if(!empty($this->service_reference)) {
+			$quote['service_reference'] = $this->service_reference;
+		}
+
 
 		$c = curl_init();
-		curl_setopt($c, CURLOPT_URL, $this->url . '/quote');
+		curl_setopt($c, CURLOPT_URL, $this->url . $this->url_end_point);
 		curl_setopt($c, CURLOPT_POST, 1);
 		curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($quote));
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
@@ -111,8 +124,10 @@ class Quote
 
 		if(isset($ret_json->services)) {
 			$this->quoted = $ret_json->services;
+		} else if(isset($ret_json->service)) {
+			$this->quoted = $ret_json->service;
 		} else {
-			$this->error = $ret_json->code;
+			$this->error = $ret_json->message;
 		}
 
 		return $this;
