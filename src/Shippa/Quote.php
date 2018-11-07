@@ -53,6 +53,9 @@ class Quote
 
 	public function setCollection($location, $country_code)
 	{
+		if(!$location) {
+			$location = '*';
+		}
 		if($country_code && $location) {
 			$this->collection = [
 				'location' => $location,
@@ -65,6 +68,9 @@ class Quote
 
 	public function setDelivery($location, $country_code)
 	{
+		if(!$location) {
+			$location = '*';
+		}
 		if($country_code && $location) {
 			$this->delivery = [
 				'location' => $location,
@@ -83,6 +89,12 @@ class Quote
 			'weight' => $weight
 		];
 
+		return $this;
+	}
+
+	public function getCostOnly()
+	{
+		$this->url_end_point = '/quote/costs';
 		return $this;
 	}
 
@@ -119,7 +131,6 @@ class Quote
 		]);
 		$ret= curl_exec ($c);
 		curl_close($c);
-
 		$ret_json = json_decode($ret);
 
 		if(isset($ret_json->services)) {
@@ -131,6 +142,7 @@ class Quote
 		} else {
 			$this->error = 'Something went wrong';
 		}
+
 
 		return $this;
 	}
