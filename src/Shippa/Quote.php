@@ -94,7 +94,11 @@ class Quote
 
 	public function getCostOnly()
 	{
-		$this->url_end_point = '/quote/costs';
+		if($this->service_reference) {
+			$this->url_end_point = '/quote/costs/service';
+		} else {
+			$this->url_end_point = '/quote/costs';
+		}
 		return $this;
 	}
 
