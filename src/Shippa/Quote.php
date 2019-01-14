@@ -151,7 +151,7 @@ class Quote
 		return $this;
 	}
 
-	public function validateCart($cart)
+	public function validateCart($cart_items)
 	{
 		$data_items = ['items' => $cart_items];
 		$c = curl_init();
