@@ -17,7 +17,8 @@ class Quote
 				$error = false,
 				$url = null,
 				$service_reference = null,
-				$url_end_point = '/quote';
+				$url_end_point = '/quote',
+				$price_groups = [];
 
 	public function __construct($key = '', $api_url = null)
 	{
@@ -102,6 +103,12 @@ class Quote
 		return $this;
 	}
 
+	public function addPriceGroup($price_group)
+	{
+		$this->price_groups[] = $price_group;
+		return $this;
+	}
+
 	public function doQuote()
 	{
 		if(!$this->url) {
@@ -114,7 +121,8 @@ class Quote
 			'shipment_type' => $this->shipment_type,
 			'collection' => $this->collection,
 			'delivery' => $this->delivery,
-			'items' => $this->items
+			'items' => $this->items,
+			'price_groups' => $this->price_groups
 		];
 
 		if(!empty($this->service_reference)) {
