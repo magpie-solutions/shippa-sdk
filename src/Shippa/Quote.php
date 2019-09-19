@@ -150,8 +150,10 @@ class Quote
 		} else if(isset($ret_json->service)) {
 			$this->quoted = $ret_json->service;
 		} else if(isset($ret_json->message)) {
+			throw new \Error($ret_json->message);
 			$this->error = $ret_json->message;
 		} else {
+			throw new \Error('Something went wrong');
 			$this->error = 'Something went wrong';
 		}
 
@@ -161,7 +163,7 @@ class Quote
 
 	public function validateCart($cart_items)
 	{
-		$data_items = ['items' => $cart_items];
+		$data_items = ['items' => $cart_items, 'price_groups' => $this->price_groups];
 		$c = curl_init();
 		curl_setopt($c, CURLOPT_URL, $this->url . '/quote/validate');
 		curl_setopt($c, CURLOPT_POST, 1);
