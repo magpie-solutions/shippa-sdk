@@ -60,7 +60,7 @@ class Quote
 		if($country_code && $location) {
 			$this->collection = [
 				'location' => $location,
-				'country_code' => $country_code,
+				'country_code' => self::convertForShippa($country_code),
 			];
 		}
 
@@ -75,7 +75,7 @@ class Quote
 		if($country_code && $location) {
 			$this->delivery = [
 				'location' => $location,
-				'country_code' => $country_code,
+				'country_code' => self::convertForShippa($country_code),
 			];
 		}
 
@@ -144,7 +144,6 @@ class Quote
 		$ret= curl_exec ($c);
 		curl_close($c);
 		$ret_json = json_decode($ret);
-
 		if(isset($ret_json->services)) {
 			$this->quoted = $ret_json->services;
 		} else if(isset($ret_json->service)) {
@@ -189,5 +188,17 @@ class Quote
 	public function error()
 	{
 		return $this->error;
+	}
+
+	public function convertForShippa($code)
+	{
+		$code = str_replace('UK_', 'GB_', $code);
+		if($code == 'GB_IMIS') {
+			$code = 'GB_IOM';
+		}
+		if($code == 'GB_M') {
+			$code = 'GB';
+		}
+		return $code;
 	}
 }

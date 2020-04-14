@@ -11,19 +11,20 @@ class Dhl extends Shipment
 				'name' => true,
 				'company' => false,
 				'address_1' => true,
-				'address_2' => true,
+				'address_2' => false,
 				'address_3' => false,
 				'town' => true,
 				'county' => false,
 				'postcode' => true,
 				'country_code' => true,
 				'phone' => false,
-				'email' => true,
+				'email' => false,
 				'instructions' => false
 			];
 
-	public function __construct($key) {
-		parent::__construct($key);
+
+	public function __construct($key, $url = null) {
+		parent::__construct($key, $url);
 		$this->setCarrier('dhl');
 	}
 
@@ -54,6 +55,11 @@ class Dhl extends Shipment
 			throw new \Exception("Service type '{$this->service['type']}' is not a valid service type");
 		}
 
+	}
+
+	public function setTerms($terms)
+	{
+		$this->terms = $terms;
 	}
 
 	public function addService($code, $type = 'delivery')

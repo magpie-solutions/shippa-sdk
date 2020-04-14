@@ -6,29 +6,35 @@ use Shippa\Parcel;
 
 abstract class Shipment
 {
-	protected 	$api_key,
-				$carrier,
-				$collection = [],
-				$delivery = [],
-				$unique_id = null,
-				$items = [],
-				$shipment_type = 'PARCEL',
-				$dropoff = false,
-				$manual_booking = false,
-				$customer_reference = null,
-				$collection_date = null,
-				$notifications = ['email' => [], 'sms' => []],
-				$tracking_reference,
-				$from_time = null,
-				$to_time = null,
-				$services,
-				$service,
-				$booking = [],
-				$order_number,
-				$customs_data = [],
-				$tracking_number,
-				$label = null,
-				$url = null;
+	public 	$api_key,
+			$carrier,
+			$collection = [],
+			$delivery = [],
+			$sender = [],
+			$receiver = [],
+			$unique_id = null,
+			$items = [],
+			$shipment_type = 'PARCEL',
+			$dropoff = false,
+			$manual_booking = false,
+			$customer_reference = null,
+			$collection_date = null,
+			$notifications = ['email' => [], 'sms' => []],
+			$tracking_reference,
+			$from_time = null,
+			$to_time = null,
+			$services,
+			$service,
+			$booking = [],
+			$order_number,
+			$customs_data = [],
+			$tracking_number,
+			$label = null,
+			$url = null,
+			$contents = null,
+			$test = false,
+			$terms = '',
+			$dutiable = false;
 
 	protected function __construct($key = '', $api_url = null)
 	{
@@ -48,7 +54,7 @@ abstract class Shipment
 		$this->carrier = $carrier;
 	}
 
-	protected function validateBooking()
+	protected function validateShipment()
 	{
 		if(empty($this->collection_date)) {
 			throw new \Exception("No collection date specified.");
@@ -75,18 +81,34 @@ abstract class Shipment
 
 	public function setCollectionData(Array $data = [])
 	{
-		if(!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["line3"])) {
-            $data["line3"] =  $data["county"] ;
+		if(!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["address_3"])) {
+            $data["address_3"] =  $data["county"] ;
         }
 		$this->collection = $data;
 	}
 
 	public function setDeliveryData(Array $data = [])
 	{
-		if(!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["line3"])) {
-            $data["line3"] =  $data["county"] ;
+		if(!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["address_3"])) {
+            $data["address_3"] =  $data["county"] ;
         }
 		$this->delivery = $data;
+	}
+
+	public function setReceiverData(Array $data = [])
+	{
+		if(!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["address_3"])) {
+            $data["address_3"] =  $data["county"] ;
+        }
+		$this->receiver = $data;
+	}
+
+	public function setSenderData(Array $data = [])
+	{
+		if(!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["address_3"])) {
+            $data["address_3"] =  $data["county"] ;
+        }
+		$this->sender = $data;
 	}
 
 	public function setCustomsData(Array $data = [])
@@ -121,7 +143,7 @@ abstract class Shipment
 
 	public function setCollectionDate($collection_date)
 	{
-		$this->collection_date = date('d-m-Y H:i:s', strtotime($collection_date));
+		$this->collection_date = date('d-m-Y', strtotime($collection_date)) . ' 00:00:00';
 	}
 
 	public function addNotification($notification_info, $type = 'email')
@@ -139,6 +161,26 @@ abstract class Shipment
 		$this->to_time = $time;
 	}
 
+	public function setContents($contents)
+	{
+		$this->contents = $contents;
+	}
+
+	public function setTest($test = false)
+	{
+		$this->test = $test;
+	}
+
+	public function setDutiable($dutiable)
+	{
+		$this->dutiable = $dutiable;
+	}
+
+	public function setTrackingNumber($tracking_number)
+	{
+		$this->tracking_number = $tracking_number;
+	}
+
 	public function doShipmentCreate()
 	{
 		if(!$this->url) {
@@ -148,16 +190,26 @@ abstract class Shipment
 
 		$this->booking = [
 			'customer_reference' => $this->customer_reference,
-			'service' => $this->service,
 			'collection_date' => $this->collection_date,
 			'from_time' => $this->from_time,
 			'to_time' => $this->to_time,
 			'tracking_reference' => $this->tracking_reference,
+			'service' => $this->service,
 			'collection' => $this->collection,
 			'delivery' => $this->delivery,
+			'contents' => $this->contents,
 			'parcels' => $this->items,
-			'notifications' => $this->notifications
+			'notifications' => $this->notifications,
+			'customs' => $this->customs_data
 		];
+
+		if(!empty($this->sender)) {
+			$booking['sender'] = $this->sender;
+		}
+
+		if(!empty($this->receiver)) {
+			$booking['receiver'] = $this->receiver;
+		}
 
 		if(!empty($this->customs_data)) {
 			$this->booking['customs'] = $this->customs_data;
@@ -173,7 +225,11 @@ abstract class Shipment
             $headers[] = "unique-id: " . $this->unique_id;
         }
 
-		$jsonData = json_encode($this->booking);
+        if($this->test) {
+        	$headers[] = 'test: 1';
+        }
+
+		return $jsonData = json_encode($this->booking);
 		$ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier.'/shipment');
         curl_setopt($ch, CURLOPT_POST, 1);
@@ -193,10 +249,73 @@ abstract class Shipment
 
         $this->tracking_number = $obj->tracking_number ;
 
-        $this->getLabel();
+        // $this->getLabel();
         return true;
 		echo json_encode($this->booking);
 
+	}
+
+	public function doLabelCreate($tracking_number = null)
+	{
+		if(!$this->url) {
+			throw new \Exception("No API Url set", 500);
+		}
+		$this->validateShipment();
+
+		$this->booking = [
+			'customer_reference' => $this->customer_reference,
+			'collection_date' => $this->collection_date,
+			'from_time' => $this->from_time,
+			'to_time' => $this->to_time,
+			'tracking_reference' => $this->tracking_reference,
+			'service' => $this->service,
+			'collection' => $this->collection,
+			'delivery' => $this->delivery,
+			'parcels' => $this->items,
+			'contents' => $this->contents,
+			'notifications' => $this->notifications
+		];
+
+		if(!empty($this->sender)) {
+			$booking['sender'] = $this->sender;
+		}
+
+		if(!empty($this->receiver)) {
+			$booking['receiver'] = $this->receiver;
+		}
+
+		if(!empty($this->customs_data)) {
+			$this->booking['customs'] = $this->customs_data;
+		}
+
+		$headers = array(
+            'Authorization: Bearer ' . $this->api_key,
+            'Content-Type: application/json',
+            'Accept: application/json',
+        );
+
+        if ($this->unique_id != null) {
+            $headers[] = "unique-id: " . $this->unique_id;
+        }
+
+        if($this->test) {
+        	$headers[] = 'test: 1';
+        }
+
+		return $jsonData = json_encode($this->booking);
+        // dd($this->booking);
+
+		// $ch = curl_init();
+  //       curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier.'/label');
+  //       curl_setopt($ch, CURLOPT_POST, 1);
+  //       curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+  //       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+  //       curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+  //       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+  //       $server_output = curl_exec ($ch);
+		// curl_close ($ch);
+  //       $obj = json_decode($server_output);
+		// return $obj;
 	}
 
 	private function getItems()
@@ -211,7 +330,8 @@ abstract class Shipment
 
 	public function garble()
 	{
-		var_dump($this);
+		file_put_contents('test.txt', json_encode($this));
+		// var_dump($this);
 	}
 
 	public function getLabel($tracking_number = null)
@@ -237,6 +357,10 @@ abstract class Shipment
             if ($this->unique_id != null) {
                 $headers[] .= "unique-id: " . $this->unique_id;
             }
+
+	        if($this->test) {
+	        	$headers[] = 'test: 1';
+	        }
 
             curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier.'/label/'.$this->tracking_number);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -278,6 +402,10 @@ abstract class Shipment
             $headers[] .= "unique-id: " . $this->unique_id;
         }
 
+        if($this->test) {
+        	$headers[] = 'test: 1';
+        }
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier.'/tracking/'.$this->tracking_number);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -315,15 +443,19 @@ abstract class Shipment
 			$this->tracking_number = $tracking_number;
 		}
 
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier.'/cancel/' . $this->tracking_number);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+		$headers = array(
             'Authorization: Bearer ' . $this->api_key,
             'Content-Type: application/json',
             'Accept: application/json',
-        ));
+        );
+
+        if($this->test) {
+        	$headers[] = 'test: 1';
+        }
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier.'/cancel/' . $this->tracking_number);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         $server_output = curl_exec ($ch);
 
@@ -350,6 +482,10 @@ abstract class Shipment
 
         if ($this->unique_id != null) {
             $headers[] .= "unique-id: " . $this->unique_id;
+        }
+
+        if($this->test) {
+        	$headers[] = 'test: 1';
         }
 
         $ch = curl_init();
