@@ -148,10 +148,10 @@ class Quote
 			$this->quoted = $ret_json->services;
 		} else if(isset($ret_json->service)) {
 			$this->quoted = $ret_json->service;
-		} else if(isset($ret_json->message)) {
-			throw new \Error($ret_json->message);
-			$this->error = $ret_json->message;
-		} else {
+		} else if(isset($ret_json->message) || isset($ret_json->description)) {
+            throw new \Error($ret_json->message ?? $ret_json->description);
+            $this->error = $ret_json->message ?? $ret_json->description;
+        } else {
 			throw new \Error('Something went wrong');
 			$this->error = 'Something went wrong';
 		}
