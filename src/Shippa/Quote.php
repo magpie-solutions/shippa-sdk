@@ -218,6 +218,6 @@ class Quote
 		]);
 		$ret= curl_exec ($c);
 		curl_close($c);
-		return json_decode($ret)->validation;
+		return json_decode($ret);
 	}
 }
