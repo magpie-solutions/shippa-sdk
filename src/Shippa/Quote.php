@@ -201,4 +201,23 @@ class Quote
 		}
 		return $code;
 	}
+
+	public function getPallets($items, $service_code)
+	{
+		$data_items = ['items' => $cart_items, 'service_code' => $service_code];
+		$c = curl_init();
+		curl_setopt($c, CURLOPT_URL, $this->url . '/quote/pallet-sizes');
+		curl_setopt($c, CURLOPT_POST, 1);
+		curl_setopt($c, CURLOPT_POSTFIELDS, json_encode($data_items));
+		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($c, CURLOPT_HTTPHEADER, [
+			'Authorization: Bearer ' . $this->api_key,
+			'Accept: application/json',
+			'Content-Type: application/json',
+    		'Content-Length: ' . strlen(json_encode($data_items))
+		]);
+		$ret= curl_exec ($c);
+		curl_close($c);
+		return json_decode($ret)->validation;
+	}
 }
