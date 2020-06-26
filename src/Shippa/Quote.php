@@ -204,7 +204,7 @@ class Quote
 
 	public function getPallets($items, $service_code)
 	{
-		$data_items = ['items' => $cart_items, 'service_code' => $service_code];
+		$data_items = ['items' => $items, 'service_code' => $service_code];
 		$c = curl_init();
 		curl_setopt($c, CURLOPT_URL, $this->url . '/quote/pallet-sizes');
 		curl_setopt($c, CURLOPT_POST, 1);
