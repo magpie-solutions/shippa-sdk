@@ -507,7 +507,35 @@ abstract class Shipment
         return $json->message->locations;
 	}
 
+	public function getShipmentData($identier, $number)
+	{
+        $headers = array(
+            'Authorization: Bearer ' . $this->api_key,
+            'Content-Type: application/json',
+            'Accept: application/json',
+        );
 
+		if(!in_array($identier, ['tracking_number', 'consignment_number'])) {
+            throw new \Exception("Shipment Lookup Failed (Unknown identier ". $identier . ")", 100);
+		}
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier .'/shipment/' . $identier . '/' .$number);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        $response = curl_exec ($ch);
+        if($response === false) {
+            throw new \Exception("Shipment Lookup Failed (".curl_error( $ch ).")", 100);
+        }
+
+        curl_close ($ch);
+
+        $json = json_decode($response);
+        return $json;
+
+	}
 
 	abstract protected function addService($code, $type = 'delivery');
 	/*{
