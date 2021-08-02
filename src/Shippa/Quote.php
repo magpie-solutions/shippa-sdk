@@ -176,7 +176,8 @@ class Quote
 		]);
 		$ret= curl_exec ($c);
 		curl_close($c);
-		return json_decode($ret)->validation;
+		$response = json_decode($ret);
+		return $response->validation ?? [];
 
 	}
 
@@ -202,9 +203,9 @@ class Quote
 		return $code;
 	}
 
-	public function getPallets($items, $service_code)
+	public function getPallets($items, $service_code, $collection = null, $delivery = null)
 	{
-		$data_items = ['items' => $items, 'service_code' => $service_code];
+		$data_items = ['items' => $items, 'service_code' => $service_code, 'collection' => $collection, 'delivery' => $delivery];
 		$c = curl_init();
 		curl_setopt($c, CURLOPT_URL, $this->url . '/quote/pallet-sizes');
 		curl_setopt($c, CURLOPT_POST, 1);
