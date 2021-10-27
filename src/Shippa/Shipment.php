@@ -19,6 +19,7 @@ abstract class Shipment
 			$manual_booking = false,
 			$customer_reference = null,
 			$collection_date = null,
+			$estimated_value = 0,
 			$notifications = ['email' => [], 'sms' => []],
 			$tracking_reference,
 			$from_time = null,
@@ -181,6 +182,101 @@ abstract class Shipment
 		$this->tracking_number = $tracking_number;
 	}
 
+	public function setCustomsCurrency($currency)
+	{
+		$this->customs_data['currency'] = $currency;
+	}
+
+	public function setCustomsReason($reason)
+	{
+		$this->customs_data['reason'] = $reason;
+	}
+
+	public function setCustomsFullReason($fullReason)
+	{
+		$this->customs_data['full_reason'] = $fullReason;
+	}
+
+	public function setCustomsExporterVat($vat)
+	{
+		$this->customs_data['sender_vat'] = $vat;
+	}
+
+	public function setCustomsExporterEori($eori)
+	{
+		$this->customs_data['exporter_eori'] = $eori;
+	}
+
+	public function setCustomsImporterVat($vat)
+	{
+		$this->customs_data['receiver_vat'] = $vat;
+	}
+
+	public function setCustomsImporterEori($eori)
+	{
+		$this->customs_data['importer_eori'] = $eori;
+	}
+
+	public function setCustomsInsuranceValue($insuranceValue)
+	{
+		$this->customs_data['insurance_value'] = $insuranceValue;
+	}
+
+	public function setCustomsShippingValue($shippingValue)
+	{
+		$this->customs_data['shipping_value'] = $shippingValue;
+	}
+
+	public function setCustomsWeightUnit($weightUnit)
+	{
+		$this->customs_data['weight_unit'] = $weightUnit;
+	}
+
+	public function setCustomsInvoiceNumber($invoiceNumber)
+	{
+		$this->customs_data['invoice_number'] = $invoiceNumber;
+	}
+
+	public function setCustomsTor($tor)
+	{
+		$this->customs_data['tor'] = $tor;
+	}
+
+	public function setCustomsIoss($ioss)
+	{
+		$this->customs_data['ioss'] = $ioss;
+	}
+
+	public function setCustomsClearanceInfo($clearanceInfo)
+	{
+		$this->customs_data['clearance_info'] = $clearanceInfo;
+	}
+
+	public function setCustomsExporter($exporter)
+	{
+		$this->customs_data['exporter'] = $exporter;
+	}
+
+	public function setCustomsImporter($importer)
+	{
+		$this->customs_data['importer'] = $importer;
+	}
+
+	public function setCustomsExportItems($exportItems)
+	{
+		$this->customs_data['export_line_items'] = $exportItems;
+	}
+
+	public function setEstimatedValue($estimatedValue)
+	{
+		$this->estimated_value = $estimatedValue;
+	}
+
+	public function setTerms($terms)
+	{
+		$this->terms = $terms;
+	}
+
 	public function doShipmentCreate()
 	{
 		if(!$this->url) {
@@ -200,7 +296,8 @@ abstract class Shipment
 			'contents' => $this->contents,
 			'parcels' => $this->items,
 			'notifications' => $this->notifications,
-			'customs' => $this->customs_data
+			'customs' => $this->customs_data,
+			'terms' => $this->terms ?? 'DAP'
 		];
 
 		if(!empty($this->sender)) {
@@ -268,12 +365,15 @@ abstract class Shipment
 			'from_time' => $this->from_time,
 			'to_time' => $this->to_time,
 			'tracking_reference' => $this->tracking_reference,
+			'estvalue' => $this->estimated_value,
 			'service' => $this->service,
 			'collection' => $this->collection,
 			'delivery' => $this->delivery,
 			'parcels' => $this->items,
 			'contents' => $this->contents,
-			'notifications' => $this->notifications
+			'notifications' => $this->notifications,
+			'dutiable' => $this->dutiable,
+			'terms' => $this->terms ?? 'DAP'
 		];
 
 		if(!empty($this->sender)) {
