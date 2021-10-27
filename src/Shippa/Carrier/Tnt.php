@@ -22,8 +22,8 @@ class Tnt extends Shipment
 				'instructions' => false
 			];
 
-	public function __construct($key) {
-		parent::__construct($key);
+	public function __construct($key, $url = null) {
+		parent::__construct($key, $url);
 		$this->setCarrier('tnt');
 	}
 
