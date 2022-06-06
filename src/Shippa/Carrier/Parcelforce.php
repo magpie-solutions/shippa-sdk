@@ -64,7 +64,7 @@ class Parcelforce extends Shipment
     public function testShipmentResponseSuccess()
     {
         $tracking = str_pad(rand(0, 999999), 6, 0);
-        return '{"status":"ok","code":200,"tracking_number":"' . $tracking . '"}';
+        return '{"status":"ok","code":200,"tracking_number":"TST' . $tracking . '"}';
     }
 
     public function testShipmentResponseError()
