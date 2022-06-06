@@ -364,7 +364,7 @@ abstract class Shipment
         $this->tracking_number = $obj->tracking_number;
 
         // $this->getLabel();
-        return true;
+        return $obj;
         echo json_encode($this->booking);
     }
 
