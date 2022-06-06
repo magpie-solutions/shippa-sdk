@@ -63,7 +63,7 @@ class Parcelforce extends Shipment
 
     public function testShipmentResponseSuccess()
     {
-        return '{"status":"ok","code":200,"tracking_number":"SP8222388"}';
+        return '{"status":"ok","code":200,"tracking_number":"TST0123456789"}';
     }
 
     public function testShipmentResponseError()
