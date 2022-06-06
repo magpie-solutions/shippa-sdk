@@ -337,11 +337,11 @@ abstract class Shipment
         }
 
         if ($this->return_test_success) {
-            return $this->testLabelResponseSuccess();
+            return $this->testShipmentResponseSuccess();
         }
 
         if ($this->return_test_error) {
-            return $this->testLabelResponseError();
+            return $this->testShipmentResponseError();
         }
 
         $ch = curl_init();
