@@ -337,23 +337,23 @@ abstract class Shipment
         }
 
         if ($this->return_test_success) {
-            return $this->testShipmentResponseSuccess();
-        }
+            $obj =  json_decode($this->testShipmentResponseSuccess());
+        } else if ($this->return_test_error) {
+            $obj =  json_decode($this->testShipmentResponseError());
+        } else {
 
-        if ($this->return_test_error) {
-            return $this->testShipmentResponseError();
-        }
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/shipment');
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $server_output = curl_exec($ch);
-        curl_close($ch);
-        $obj = json_decode($server_output);
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/shipment');
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
+            curl_close($ch);
+            $obj = json_decode($server_output);
+        }
 
         if ($obj->status == "error") {
             throw new \Exception($this->order_number . " Shipment failed: " . $obj->message);
