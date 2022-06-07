@@ -519,7 +519,8 @@ abstract class Shipment
             }
             $this->label = $obj->label;
 
-            return $this->label;
+            // return $this->label;
+            return $obj;
         }
     }
 
