@@ -614,7 +614,7 @@ abstract class Shipment
         }
 
         if ($obj->status === 'error') {
-            throw new \Exception($obj->description);
+            throw new \Exception($obj->message ?? $obj->description);
         }
 
         return $obj;
