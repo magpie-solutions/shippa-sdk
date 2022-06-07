@@ -89,7 +89,7 @@ class Parcelforce extends Shipment
 
     public function testShipmentCancelError()
     {
-        return '{"status":"error", "message" : "Could not cancel."}';
+        return '{"status":"error", "description" : "Could not cancel."}';
     }
 
     public function testLabelDeleteSuccess()
@@ -99,6 +99,6 @@ class Parcelforce extends Shipment
 
     public function testLabelDeleteError()
     {
-        return '{"status":"error", "message" : "Could not cancel."}';
+        return '{"status":"error", "description" : "Could not cancel."}';
     }
 }
