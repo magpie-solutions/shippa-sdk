@@ -596,9 +596,9 @@ abstract class Shipment
         }
 
         if ($this->return_test_success) {
-            $obj =  json_decode($this->testShipmentResponseSuccess());
+            $obj =  json_decode($this->testShipmentCancelSuccess());
         } else if ($this->return_test_error) {
-            $obj =  json_decode($this->testShipmentResponseError());
+            $obj =  json_decode($this->testShipmentCancelError());
         } else {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/cancel/' . $this->tracking_number);
