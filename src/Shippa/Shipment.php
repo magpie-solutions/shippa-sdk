@@ -424,25 +424,26 @@ abstract class Shipment
         }
 
         if ($this->return_test_success) {
-            return $this->testLabelResponseSuccess();
+            $obj = $this->testLabelResponseSuccess();
+        } else if ($this->return_test_error) {
+            $obj = $this->testLabelResponseError();
+        } else {
+
+            // dd($this->booking);
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/label');
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
+            curl_close($ch);
+            $obj = json_decode($server_output);
         }
 
-        if ($this->return_test_error) {
-            return $this->testLabelResponseError();
-        }
-        // dd($this->booking);
-
-        // $ch = curl_init();
-        //       curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier.'/label');
-        //       curl_setopt($ch, CURLOPT_POST, 1);
-        //       curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
-        //       curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        //       curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        //       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        //       $server_output = curl_exec ($ch);
-        // curl_close ($ch);
-        //       $obj = json_decode($server_output);
-        // return $obj;
+        return $obj;
     }
 
     private function getItems()
@@ -495,22 +496,20 @@ abstract class Shipment
             }
 
             if ($this->return_test_success) {
-                return $this->testLabelResponseSuccess();
+                $obj =  $this->testLabelResponseSuccess();
+            } else if ($this->return_test_error) {
+                $obj = $this->testLabelResponseError();
+            } else {
+
+                curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/label/' . $this->tracking_number);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                $server_output = curl_exec($ch);
+
+                curl_close($ch);
+                $obj = json_decode($server_output);
             }
-
-            if ($this->return_test_error) {
-                return $this->testLabelResponseError();
-            }
-
-            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/label/' . $this->tracking_number);
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            $server_output = curl_exec($ch);
-
-            curl_close($ch);
-            $obj = json_decode($server_output);
-
             if (isset($obj->error)) {
                 throw new \Exception("Label Failed (" . $obj->error[0]->errorCode . "): " . $obj->error[0]->errorMessage . "(" . $obj->error[0]->obj . ")", $obj->error[0]->errorCode);
             }
@@ -592,17 +591,31 @@ abstract class Shipment
         if ($this->test) {
             $headers[] = 'test: 1';
         }
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/cancel/' . $this->tracking_number);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $server_output = curl_exec($ch);
+        if ($this->return_raw) {
+            return ['tracking_number' => $this->tracking_number];
+        }
 
-        //mail('sales@parcelbroker.co.uk', 'ParcelForce', print_r($server_output, true));
+        if ($this->return_test_success) {
+            $obj =  json_decode($this->testShipmentResponseSuccess());
+        } else if ($this->return_test_error) {
+            $obj =  json_decode($this->testShipmentResponseError());
+        } else {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/cancel/' . $this->tracking_number);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
 
-        curl_close($ch);
-        $obj = json_decode($server_output);
+            //mail('sales@parcelbroker.co.uk', 'ParcelForce', print_r($server_output, true));
+
+            curl_close($ch);
+            $obj = json_decode($server_output);
+        }
+
+        if ($obj->status === 'error') {
+            throw new \Exception($obj->description);
+        }
 
         return $obj->label;
     }
@@ -680,6 +693,10 @@ abstract class Shipment
     abstract public function testShipmentResponseError();
     abstract public function testLabelResponseSuccess();
     abstract public function testLabelResponseError();
+    abstract public function testShipmentCancelSuccess();
+    abstract public function testShipmentCancelError();
+    abstract public function testLabelDeleteSuccess();
+    abstract public function testLabelDeleteError();
     /*{
 		$this->services[] = ['code' => $code, 'type' => $type];
 	}*/

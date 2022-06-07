@@ -81,4 +81,24 @@ class Parcelforce extends Shipment
     {
         return '{"status":"error","code":3,"Alerts":{"Alert":{"Code":21000005,"Message":"Labels may not be requested for this collection request","Type":"ERROR"}}}';
     }
+
+    public function testShipmentCancelSuccess()
+    {
+        return '{"status":"success"}';
+    }
+
+    public function testShipmentCancelError()
+    {
+        return '{"status":"error", "message" : "Could not cancel."}';
+    }
+
+    public function testLabelDeleteSuccess()
+    {
+        return '{"status":"success"}';
+    }
+
+    public function testLabelDeleteError()
+    {
+        return '{"status":"error", "message" : "Could not cancel."}';
+    }
 }
