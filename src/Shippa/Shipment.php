@@ -424,9 +424,9 @@ abstract class Shipment
         }
 
         if ($this->return_test_success) {
-            $obj = $this->testLabelResponseSuccess();
+            $obj = json_decode($this->testLabelResponseSuccess());
         } else if ($this->return_test_error) {
-            $obj = $this->testLabelResponseError();
+            $obj = json_decode($this->testLabelResponseError());
         } else {
 
             // dd($this->booking);
@@ -496,9 +496,9 @@ abstract class Shipment
             }
 
             if ($this->return_test_success) {
-                $obj =  $this->testLabelResponseSuccess();
+                $obj =  json_decode($this->testLabelResponseSuccess());
             } else if ($this->return_test_error) {
-                $obj = $this->testLabelResponseError();
+                $obj = json_decode($this->testLabelResponseError());
             } else {
 
                 curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/label/' . $this->tracking_number);
