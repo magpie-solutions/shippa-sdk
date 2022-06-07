@@ -617,7 +617,7 @@ abstract class Shipment
             throw new \Exception($obj->description);
         }
 
-        return $obj->label;
+        return $obj;
     }
 
     public function getLocations($country_code, $postcode)
