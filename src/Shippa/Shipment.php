@@ -446,6 +446,44 @@ abstract class Shipment
         return $obj;
     }
 
+    public function doLabelVoid()
+    {
+        $headers = array(
+            'Authorization: Bearer ' . $this->api_key,
+            'Content-Type: application/json',
+            'Accept: application/json',
+        );
+
+        if ($this->unique_id != null) {
+            $headers[] = "unique-id: " . $this->unique_id;
+        }
+
+        if ($this->test) {
+            $headers[] = 'test: 1';
+        }
+        if ($this->return_test_success) {
+            $obj = json_decode($this->testLabelDeleteSuccess());
+        } else if ($this->return_test_error) {
+            $obj = json_decode($this->testLabelDeleteError());
+        } else {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/void/' . $this->tracking_ref);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
+            $obj = json_decode($server_output);
+        }
+
+        if ($obj->status == 'success') {
+            return $obj;
+        } else if ($obj->status == "error") {
+            throw new \Exception("Label Void Failed: " . $obj->message);
+        } else if (empty($obj->tracking_number)) {
+            throw new \Exception("Label Void Failed - No tracking number returned: " . $obj->message);
+        }
+    }
+
     private function getItems()
     {
         $items = [];
