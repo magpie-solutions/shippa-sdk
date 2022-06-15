@@ -69,7 +69,7 @@ class Ups extends Shipment
 
     public function testShipmentResponseError() // Need confirmation
     {
-        return '{}';
+        return '{"status":"error"}';
     }
 
     public function testLabelResponseSuccess()

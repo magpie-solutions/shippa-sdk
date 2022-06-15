@@ -70,7 +70,7 @@ class Pallex extends Shipment
 
     public function testShipmentResponseError()
     {
-        return '{}';
+        return '{"status":"error"}';
     }
 
     public function testLabelResponseSuccess()
@@ -80,7 +80,7 @@ class Pallex extends Shipment
 
     public function testLabelResponseError() // NEED CONFIRMATION
     {
-        return '{}';
+        return '{"status":"error"}';
     }
 
     public function testShipmentCancelSuccess() // NEED CONFIRMATION

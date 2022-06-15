@@ -75,7 +75,7 @@ class Dhl extends Shipment
 
     public function testShipmentResponseError() // Need confirmation
     {
-        return '{}';
+        return '{"status":"error"}';
     }
 
     public function testLabelResponseSuccess()
@@ -86,7 +86,7 @@ class Dhl extends Shipment
 
     public function testLabelResponseError() // NEED CONFIRMATION
     {
-        return '{}';
+        return '{"status":"error"}';
     }
 
     public function testShipmentCancelSuccess() // NEED CONFIRMATION
