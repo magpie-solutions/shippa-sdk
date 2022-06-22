@@ -185,6 +185,7 @@ abstract class Shipment
     public function setTrackingNumber($tracking_number)
     {
         $this->tracking_number = $tracking_number;
+        $this->tracking_reference = $tracking_number;
     }
 
     public function setCustomsCurrency($currency)
