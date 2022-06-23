@@ -728,7 +728,7 @@ abstract class Shipment
         return $json;
     }
 
-    abstract protected function addService($code, $type = 'delivery');
+    abstract protected function addService($code, $type = 'collection');
     abstract public function testShipmentResponseSuccess();
     abstract public function testShipmentResponseError();
     abstract public function testLabelResponseSuccess();
