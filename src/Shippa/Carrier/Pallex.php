@@ -60,6 +60,10 @@ class Pallex extends Shipment
     {
         $this->service = ['code' => $code, 'type' => $type];
     }
+    public function addDeliveryService($code)
+    {
+        $this->service['delivery']['code'] = $code;
+    }
 
 
     public function testShipmentResponseSuccess()
