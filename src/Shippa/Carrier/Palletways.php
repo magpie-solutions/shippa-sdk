@@ -112,12 +112,12 @@ class Palletways extends Shipment
 
         $shipment = [
             'collection' => [
-                'postcode' => $this->collection_postcode,
-                'country_code' => $this->checkCountryCode($this->collection_country_code)
+                'postcode' => $this->collection['postcode'],
+                'country_code' => $this->collection['country_code']
             ],
             'delivery' => [
-                'postcode' => $this->delivery_postcode,
-                'country_code' => $this->checkCountryCode($this->delivery_country_code)
+                'postcode' => $this->delivery['postcode'],
+                'country_code' => $this->delivery['country_code']
             ]
         ];
 
@@ -137,12 +137,5 @@ class Palletways extends Shipment
         $server_output = curl_exec($ch);
         curl_close($ch);
         return json_decode($server_output);
-    }
-
-    public function checkCountryCode($code)
-    {
-        if (strpos($code, "UK_") === 0) return "GB";
-
-        return $code;
     }
 }
