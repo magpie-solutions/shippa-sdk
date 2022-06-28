@@ -101,4 +101,48 @@ class Palletways extends Shipment
     {
         return '{"status":"error", "description" : "Could not cancel label."}';
     }
+
+    public function services()
+    {
+        $headers = array(
+            'Authorization: Bearer ' . $this->api_key,
+            'Content-Type: application/json',
+            'Accept: application/json',
+        );
+
+        $shipment = [
+            'collection' => [
+                'postcode' => $this->collection_postcode,
+                'country_code' => $this->checkCountryCode($this->collection_country_code)
+            ],
+            'delivery' => [
+                'postcode' => $this->delivery_postcode,
+                'country_code' => $this->checkCountryCode($this->delivery_country_code)
+            ]
+        ];
+
+        $jsonData = json_encode($shipment);
+
+        if ($this->unique_id != null) {
+            $shipment["unique_id"] = $this->unique_id;
+        }
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/services');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $server_output = curl_exec($ch);
+        curl_close($ch);
+        return json_decode($server_output);
+    }
+
+    public function checkCountryCode($code)
+    {
+        if (strpos($code, "UK_") === 0) return "GB";
+
+        return $code;
+    }
 }
