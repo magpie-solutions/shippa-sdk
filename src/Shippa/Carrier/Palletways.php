@@ -47,13 +47,13 @@ class Palletways extends Shipment
             }
         }
 
-        if (empty($this->service) || empty($this->service['code'])) {
+        if (empty($this->service) || empty($this->service['Collection']['code']) || empty($this->service['Delivery']['code'])) {
             throw new \Exception("No service specified");
         }
 
-        if (!in_array($this->service['type'], ['delivery', 'collection'])) {
-            throw new \Exception("Service type '{$this->service['type']}' is not a valid service type");
-        }
+        // if (!in_array($this->service['type'], ['delivery', 'collection'])) {
+        //     throw new \Exception("Service type '{$this->service['type']}' is not a valid service type");
+        // }
     }
 
     public function addService($codes, $type = 'delivery')
@@ -113,11 +113,11 @@ class Palletways extends Shipment
         $shipment = [
             'collection' => [
                 'postcode' => $this->collection['postcode'],
-                'country_code' => $this->collection['country_code']
+                'country_code' => $this->collection['real_country_code']
             ],
             'delivery' => [
                 'postcode' => $this->delivery['postcode'],
-                'country_code' => $this->delivery['country_code']
+                'country_code' => $this->delivery['real_country_code']
             ]
         ];
 

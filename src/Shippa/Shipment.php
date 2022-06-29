@@ -36,6 +36,7 @@ abstract class Shipment
         $test = false,
         $terms = '',
         $dutiable = false,
+        $pallets = null,
 
         $return_raw = false,
         $return_test_success = false,
@@ -283,6 +284,11 @@ abstract class Shipment
         $this->terms = $terms;
     }
 
+    public function setPallets($pallets)
+    {
+        $this->pallets = $pallets;
+    }
+
     public function doShipmentCreate()
     {
         if (!$this->url) {
@@ -316,6 +322,10 @@ abstract class Shipment
 
         if (!empty($this->customs_data)) {
             $this->booking['customs'] = $this->customs_data;
+        }
+
+        if (!empty($this->pallets)) {
+            $booking['pallets'] = $this->pallets;
         }
 
         $headers = array(
