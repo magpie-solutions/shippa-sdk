@@ -113,11 +113,11 @@ class Palletways extends Shipment
         $shipment = [
             'collection' => [
                 'postcode' => $this->collection['postcode'],
-                'country_code' => $this->collection['real_country_code']
+                'country_code' => $this->collection['country_code']
             ],
             'delivery' => [
                 'postcode' => $this->delivery['postcode'],
-                'country_code' => $this->delivery['real_country_code']
+                'country_code' => $this->delivery['country_code']
             ]
         ];
 
