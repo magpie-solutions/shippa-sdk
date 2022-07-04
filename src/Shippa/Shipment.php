@@ -10,6 +10,7 @@ abstract class Shipment
         $carrier,
         $collection = [],
         $delivery = [],
+        $alternative = [],
         $sender = [],
         $receiver = [],
         $unique_id = null,
@@ -100,6 +101,14 @@ abstract class Shipment
             $data["address_3"] =  $data["county"];
         }
         $this->delivery = $data;
+    }
+
+    public function setAlternativeCollectionData(array $data = [])
+    {
+        if (!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["address_3"])) {
+            $data["address_3"] =  $data["county"];
+        }
+        $this->alternative = $data;
     }
 
     public function setReceiverData(array $data = [])
@@ -305,6 +314,7 @@ abstract class Shipment
             'service' => $this->service,
             'collection' => $this->collection,
             'delivery' => $this->delivery,
+            'alternative' => $this->alternative,
             'contents' => $this->contents,
             'parcels' => $this->items,
             'notifications' => $this->notifications,
@@ -396,6 +406,7 @@ abstract class Shipment
             'service' => $this->service,
             'collection' => $this->collection,
             'delivery' => $this->delivery,
+            'alternative' => $this->alternative,
             'parcels' => $this->items,
             'contents' => $this->contents,
             'notifications' => $this->notifications,
