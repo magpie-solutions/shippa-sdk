@@ -631,7 +631,8 @@ abstract class Shipment
         curl_close($ch);
 
 
-        return $obj->events;
+        // return $obj->events;
+        return $obj;
     }
 
     public function doShipmentCancel($tracking_number = null)
