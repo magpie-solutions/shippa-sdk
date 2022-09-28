@@ -584,7 +584,7 @@ abstract class Shipment
         }
     }
 
-    public function getTracking($tracking_number = null)
+    public function getTracking($tracking_number = null, $request = null)
     {
         if (!$this->url) {
             throw new \Exception("No API Url set", 500);

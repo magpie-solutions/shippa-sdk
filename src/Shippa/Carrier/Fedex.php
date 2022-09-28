@@ -102,4 +102,57 @@ class Fedex extends Shipment
     {
         return '{"status":"error", "description" : "Could not cancel label."}';
     }
+
+    public function getTracking($tracking_number = null, $request = null)
+    {
+        if (!$this->url) {
+            throw new \Exception("No API Url set", 500);
+        }
+        if (empty($this->tracking_number)) {
+            $this->tracking_number = $tracking_number;
+        }
+        $headers = [
+            'Authorization: Bearer ' . $this->api_key,
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ];
+
+        if ($this->unique_id != null) {
+            $headers[] .= "unique-id: " . $this->unique_id;
+        }
+
+        if ($this->test) {
+            $headers[] = 'test: 1';
+        }
+        $jsonData = [
+            'tracking_ref' => $tracking_number,
+            'shipDate' => $request->shipDate
+        ];
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/tracking/');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($jsonData));
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+        //        var_dump($this->url . '/' . $this->carrier.'/tracking/'.$tracking_number);
+        //        var_dump($this->carrier);
+        //        var_dump($this->token);
+
+        $server_output = curl_exec($ch);
+
+        $obj = json_decode($server_output);
+
+        if (isset($obj->completeTrackResults[0]->trackResults[0]->error)) {
+            $err = $obj->completeTrackResults[0]->trackResults[0]->error;
+            throw new ShippaException("Tracking Failed (" . $err->code . "): " . $err->message, $err->code);
+        }
+
+        curl_close($ch);
+
+
+        // return $obj->events;
+        return $obj;
+    }
 }
