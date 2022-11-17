@@ -22,6 +22,8 @@ class Dhl extends Shipment
         'instructions' => false
     ];
 
+    public $collection_country, $collection_point, $collection_date, $tracking_ref;
+
 
     public function __construct($key, $url = null)
     {
@@ -107,5 +109,61 @@ class Dhl extends Shipment
     public function testLabelDeleteError() // NEED CONFIRMATION
     {
         return '{"status":"error", "description" : "Could not cancel label."}';
+    }
+
+    public function doShipmentCancel($tracking_number = null)
+    {
+        if (!$this->url) {
+            throw new \Exception("No API Url set", 500);
+        }
+        if (empty($this->tracking_number)) {
+            $this->tracking_number = $tracking_number;
+        }
+
+        $headers = array(
+            'Authorization: Bearer ' . $this->api_key,
+            'Content-Type: application/json',
+            'Accept: application/json',
+        );
+
+        if ($this->test) {
+            $headers[] = 'test: 1';
+        }
+        if ($this->return_raw) {
+            return ['tracking_number' => $this->tracking_number];
+        }
+
+        $jsonData = json_encode([
+            'collection_country' => $this->collection_country, //$s["col_country_code"],
+            'collection_point' => $this->collection_point, //$props['ORIGINSERVICECODE'],
+            'collection_date' => $this->collection_date, //date('d-m-Y H:i:s', strtotime($s["collection_date"])),
+            'tracking_ref' => $this->tracking_ref, //$props['CONFNO']
+        ]);
+
+        if ($this->return_test_success) {
+            $obj =  json_decode($this->testShipmentCancelSuccess());
+        } else if ($this->return_test_error) {
+            $obj =  json_decode($this->testShipmentCancelError());
+        } else {
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/cancel/' . $this->tracking_number);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $jsonData);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            $server_output = curl_exec($ch);
+
+            //mail('sales@parcelbroker.co.uk', 'ParcelForce', print_r($server_output, true));
+
+            curl_close($ch);
+            $obj = json_decode($server_output);
+        }
+
+        if ($obj->status === 'error') {
+            throw new \Exception($obj->message ?? $obj->description);
+        }
+
+        return $obj;
     }
 }
