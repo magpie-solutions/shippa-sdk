@@ -283,6 +283,11 @@ abstract class Shipment
         $this->customs_data['export_line_items'] = $exportItems;
     }
 
+    public function setCustomsPaperwork($customsPaperwork)
+    {
+        $this->commercial_invoice_base_64 = $customsPaperwork;
+    }
+
     public function setEstimatedValue($estimatedValue)
     {
         $this->estimated_value = $estimatedValue;
