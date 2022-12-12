@@ -38,6 +38,8 @@ abstract class Shipment
         $terms = '',
         $dutiable = false,
         $pallets = null,
+        $commercial_invoice_base_64 = null,
+        $no_plt = false,
 
         $return_raw = false,
         $return_test_success = false,
@@ -52,9 +54,6 @@ abstract class Shipment
         if ($api_url) {
             $this->url = $api_url;
         }
-        // else if(defined('SHIPPA_API_URL')) {
-        // 	$this->url = SHIPPA_API_URL;
-        // }
     }
 
     protected function setCarrier($carrier)
@@ -303,6 +302,11 @@ abstract class Shipment
         $this->pallets = $pallets;
     }
 
+    public function setNoPlt($noPlt)
+    {
+        $this->no_plt = $noPlt;
+    }
+
     public function doShipmentCreate()
     {
         if (!$this->url) {
@@ -341,6 +345,14 @@ abstract class Shipment
 
         if (!empty($this->pallets)) {
             $booking['pallets'] = $this->pallets;
+        }
+
+        if (!empty($this->commercial_invoice_base_64)) {
+            $this->booking['commercial_invoice_base_64'] = $this->commercial_invoice_base_64;
+        }
+
+        if (!empty($this->no_plt)) {
+            $this->booking['no_plt'] = $this->no_plt;
         }
 
         $headers = array(
@@ -429,6 +441,10 @@ abstract class Shipment
 
         if (!empty($this->customs_data)) {
             $this->booking['customs'] = $this->customs_data;
+        }
+
+        if (!empty($this->commercial_invoice_base_64)) {
+            $this->booking['commercial_invoice_base_64'] = $this->commercial_invoice_base_64;
         }
 
         $headers = array(
