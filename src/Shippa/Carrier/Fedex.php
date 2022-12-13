@@ -56,7 +56,7 @@ class Fedex extends Shipment
         }
     }
 
-    public function addService($code, $type = 'delivery')
+    public function addService($code, $type = 'collection')
     {
         $this->service = ['code' => $code, 'type' => $type];
     }

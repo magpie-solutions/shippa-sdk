@@ -56,7 +56,7 @@ class Palletways extends Shipment
         // }
     }
 
-    public function addService($codes, $type = 'delivery')
+    public function addService($codes, $type = 'collection')
     {
         $this->service[$type] = ['code' => $codes['code'], 'surcharge' => $codes['surcharge'], 'type' => $type];
     }

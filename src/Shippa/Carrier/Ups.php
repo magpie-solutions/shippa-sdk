@@ -56,9 +56,19 @@ class Ups extends Shipment
         }
     }
 
-    public function addService($code, $type = 'delivery')
+    public function addService($code, $type = 'collection')
     {
         $this->service = ['code' => $code, 'type' => $type];
+    }
+
+    public function setServiceReturn($is_return = false)
+    {
+        $this->service['return'] = $is_return;
+    }
+
+    public function setServiceDocument($is_document = false)
+    {
+        $this->service['document'] = $is_document;
     }
 
     public function testShipmentResponseSuccess()
