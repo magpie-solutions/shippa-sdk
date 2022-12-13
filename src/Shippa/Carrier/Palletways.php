@@ -61,6 +61,16 @@ class Palletways extends Shipment
         $this->service[$type] = ['code' => $codes['code'], 'surcharge' => $codes['surcharge'], 'type' => $type];
     }
 
+    public function setServiceReturn($is_return = false)
+    {
+        $this->service['return'] = $is_return;
+    }
+
+    public function setServiceDocument($is_document = false)
+    {
+        $this->service['document'] = $is_document;
+    }
+
     public function testShipmentResponseSuccess()
     {
         $tracking = str_pad(rand(0, 999999), 6, 0);

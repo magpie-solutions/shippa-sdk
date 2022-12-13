@@ -60,6 +60,17 @@ class Pallex extends Shipment
     {
         $this->service = ['code' => $code, 'type' => $type];
     }
+
+    public function setServiceReturn($is_return = false)
+    {
+        $this->service['return'] = $is_return;
+    }
+
+    public function setServiceDocument($is_document = false)
+    {
+        $this->service['document'] = $is_document;
+    }
+
     public function addDeliveryService($code)
     {
         $this->service['delivery']['code'] = $code;

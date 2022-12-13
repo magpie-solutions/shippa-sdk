@@ -772,6 +772,8 @@ abstract class Shipment
     }
 
     abstract protected function addService($code, $type = 'collection');
+    abstract protected function setServiceReturn($is_return = false);
+    abstract protected function setServiceDocument($is_document = false);
     abstract public function testShipmentResponseSuccess();
     abstract public function testShipmentResponseError();
     abstract public function testLabelResponseSuccess();
