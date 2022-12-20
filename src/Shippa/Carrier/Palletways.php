@@ -47,8 +47,8 @@ class Palletways extends Shipment
             }
         }
 
-        if (empty($this->service) || empty($this->service['Collection']['code']) || empty($this->service['Delivery']['code'])) {
-            throw new \Exception("No service specified");
+        if (empty($this->services) || empty($this->services['Collection']['code']) || empty($this->services['Delivery']['code'])) {
+            throw new \Exception("No services specified");
         }
 
         // if (!in_array($this->service['type'], ['delivery', 'collection'])) {
