@@ -420,7 +420,6 @@ abstract class Shipment
             'to_time' => $this->to_time,
             'tracking_reference' => $this->tracking_reference,
             'estvalue' => $this->estimated_value,
-            'service' => $this->service,
             'collection' => $this->collection,
             'delivery' => $this->delivery,
             'alternate' => $this->alternative,
@@ -430,6 +429,14 @@ abstract class Shipment
             'dutiable' => $this->dutiable,
             'terms' => $this->terms ?? 'DAP'
         ];
+
+        if (!empty($this->service)) {
+            $this->booking['service'] = $this->service;
+        }
+
+        if (!empty($this->services)) {
+            $this->booking['services'] = $this->services;
+        }
 
         if (!empty($this->sender)) {
             $booking['sender'] = $this->sender;
