@@ -320,7 +320,6 @@ abstract class Shipment
             'from_time' => $this->from_time,
             'to_time' => $this->to_time,
             'tracking_reference' => $this->tracking_reference,
-            'service' => $this->service,
             'collection' => $this->collection,
             'delivery' => $this->delivery,
             'alternate' => $this->alternative,
@@ -330,6 +329,14 @@ abstract class Shipment
             'customs' => $this->customs_data,
             'terms' => $this->terms ?? 'DAP'
         ];
+
+        if (!empty($this->service)) {
+            $this->booking['service'] = $this->service;
+        }
+
+        if (!empty($this->services)) {
+            $this->booking['services'] = $this->services;
+        }
 
         if (!empty($this->sender)) {
             $booking['sender'] = $this->sender;
