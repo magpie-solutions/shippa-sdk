@@ -400,10 +400,10 @@ abstract class Shipment
             $obj = json_decode($server_output);
         }
 
-        if ($obj->status == "error") {
+        if (isset($obj->status) && $obj->status == "error") {
             throw new \Exception($this->order_number . " Shipment failed: " . $obj->message);
         } else if (empty($obj->tracking_number)) {
-            throw new \Exception($this->order_number . " Shippa Error - No tracking number returned: " . $obj->message);
+            throw new \Exception($this->order_number . " Shippa Error - No tracking number returned: " . json_encode($obj));
         }
 
         $this->tracking_number = $obj->tracking_number;
