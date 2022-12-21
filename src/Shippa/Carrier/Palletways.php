@@ -2,6 +2,7 @@
 
 namespace Shippa\Carrier;
 
+use Shippa\Parcel;
 use Shippa\Shipment;
 
 class Palletways extends Shipment
