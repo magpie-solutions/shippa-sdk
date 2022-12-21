@@ -56,6 +56,11 @@ class Palletways extends Shipment
         // }
     }
 
+    public function addPallet($length, $width, $height, $weight, $size)
+    {
+        $this->items[] = new Parcel($length, $width, $height, $weight, $size);
+    }
+
     public function addService($codes, $type = 'collection')
     {
         $this->services[$type] = ['code' => $codes['code'], 'surcharge' => $codes['surcharge'], 'type' => $type];

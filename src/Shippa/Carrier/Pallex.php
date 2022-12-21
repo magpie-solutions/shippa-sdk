@@ -76,6 +76,11 @@ class Pallex extends Shipment
         $this->service['delivery']['code'] = $code;
     }
 
+    public function addPallet($length, $width, $height, $weight, $size)
+    {
+        $this->items[] = new Parcel($length, $width, $height, $weight, $size);
+    }
+
 
     public function testShipmentResponseSuccess()
     {
