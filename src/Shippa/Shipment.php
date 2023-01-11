@@ -453,7 +453,7 @@ abstract class Shipment
             $booking['receiver'] = $this->receiver;
         }
 
-        if (!$this->customs_data) {
+        if (!empty($this->customs_data)) {
             $this->booking['customs'] = $this->customs_data;
         }
 
