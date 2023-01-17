@@ -524,7 +524,7 @@ abstract class Shipment
             $obj = json_decode($this->testLabelDeleteError());
         } else {
             $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/void/' . $this->tracking_ref);
+            curl_setopt($ch, CURLOPT_URL, $this->url . $this->carrier . '/void/' . $this->tracking_reference);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
