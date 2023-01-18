@@ -670,7 +670,7 @@ abstract class Shipment
         return $obj;
     }
 
-    public function doShipmentCancel($tracking_number = null)
+    public function doShipmentCancel($tracking_number = null, $curlPost = false, $data = [])
     {
         if (!$this->url) {
             throw new \Exception("No API Url set", 500);
@@ -702,6 +702,10 @@ abstract class Shipment
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            if ($curlPost) {
+                curl_setopt($ch, CURLOPT_POST, 1);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            }
             $server_output = curl_exec($ch);
 
             //mail('sales@parcelbroker.co.uk', 'ParcelForce', print_r($server_output, true));
