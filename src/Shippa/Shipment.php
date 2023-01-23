@@ -688,6 +688,11 @@ abstract class Shipment
         if ($this->test) {
             $headers[] = 'test: 1';
         }
+
+        if ($this->unique_id != null) {
+            $headers[] = "unique-id: " . $this->unique_id;
+        }
+
         if ($this->return_raw) {
             return ['tracking_number' => $this->tracking_number];
         }
