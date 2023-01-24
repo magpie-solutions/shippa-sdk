@@ -325,9 +325,7 @@ abstract class Shipment
             'alternate' => $this->alternative,
             'contents' => $this->contents,
             'parcels' => $this->items,
-            'notifications' => $this->notifications,
-            'customs' => $this->customs_data,
-            'terms' => $this->terms ?? 'DAP'
+            'notifications' => $this->notifications
         ];
 
         if (!empty($this->service)) {
@@ -348,6 +346,7 @@ abstract class Shipment
 
         if (!empty($this->customs_data)) {
             $this->booking['customs'] = $this->customs_data;
+            $this->booking['terms'] = $this->terms ?? 'DAP';
         }
 
         if (!empty($this->pallets)) {
