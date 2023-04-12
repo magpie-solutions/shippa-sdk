@@ -121,7 +121,7 @@ class Dhl extends Shipment
         return '{"status":"error", "description" : "Could not cancel label."}';
     }
 
-    public function doShipmentCancel($tracking_number = null)
+    public function doShipmentCancel($tracking_number = null, $curlPost = false, $data = [])
     {
         if (!$this->url) {
             throw new \Exception("No API Url set", 500);
