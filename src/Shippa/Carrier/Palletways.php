@@ -12,14 +12,14 @@ class Palletways extends Shipment
         'name' => true,
         'company' => false,
         'address_1' => true,
-        'address_2' => true,
+        'address_2' => false,
         'address_3' => false,
         'town' => true,
         'county' => false,
         'postcode' => true,
         'country_code' => true,
         'phone' => false,
-        'email' => true,
+        'email' => false,
         'instructions' => false
     ];
 
