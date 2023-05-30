@@ -35,7 +35,7 @@ abstract class Shipment
         $url = null,
         $contents = null,
         $test = false,
-        $terms = '',
+        $terms = 'DAP',
         $dutiable = false,
         $pallets = null,
         $commercial_invoice_base_64 = null,
