@@ -15,7 +15,7 @@ class Parcelforce extends Shipment
         'address_3' => false,
         'town' => true,
         'county' => false,
-        'postcode' => true,
+        'postcode' => false,
         'country_code' => true,
         'phone' => false,
         'email' => false,
