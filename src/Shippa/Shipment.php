@@ -43,7 +43,8 @@ abstract class Shipment
 
         $return_raw = false,
         $return_test_success = false,
-        $return_test_error = false;
+        $return_test_error = false,
+        $label_format = 'A4';
 
     protected function __construct($key = '', $api_url = null)
     {
@@ -307,6 +308,11 @@ abstract class Shipment
         $this->no_plt = $noPlt;
     }
 
+    public function setLabelFormat($format = 'A4')
+    {
+        $this->label_format = $format;
+    }
+
     public function doShipmentCreate()
     {
         if (!$this->url) {
@@ -433,7 +439,8 @@ abstract class Shipment
             'contents' => $this->contents,
             'notifications' => $this->notifications,
             'dutiable' => $this->dutiable,
-            'terms' => $this->terms ?? 'DAP'
+            'terms' => $this->terms ?? 'DAP',
+            'label_format' => $this->label_format ?? 'A4',
         ];
 
         if (!empty($this->service)) {
