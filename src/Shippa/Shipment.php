@@ -467,6 +467,10 @@ abstract class Shipment
             $this->booking['commercial_invoice_base_64'] = $this->commercial_invoice_base_64;
         }
 
+        if (!empty($this->no_plt)) {
+            $this->booking['no_plt'] = $this->no_plt;
+        }
+
         $headers = array(
             'Authorization: Bearer ' . $this->api_key,
             'Content-Type: application/json',
