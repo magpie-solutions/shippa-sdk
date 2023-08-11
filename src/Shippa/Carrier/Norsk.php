@@ -28,7 +28,7 @@ class Norsk extends Shipment
         $this->setCarrier('norsk');
     }
 
-    public function setCarrer($carrier)
+    public function setCarrier($carrier)
     {
         $this->carrier = 'norsk' . str_replace('norsk', '', strtolower($carrier));
     }
