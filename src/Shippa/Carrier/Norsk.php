@@ -48,7 +48,7 @@ class Norsk extends Shipment
 
     public function addService($code, $type = 'collection')
     {
-        $this->service = ['code' => $code, 'type' => $type];
+        $this->service = ['code' => $code, 'type' => 'delivery'];
     }
 
     public function setServiceReturn($is_return = false)
