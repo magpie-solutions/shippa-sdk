@@ -61,6 +61,11 @@ class Norsk extends Shipment
         $this->service['document'] = $is_document;
     }
 
+    public function setTimedService($timed = '')
+    {
+        $this->service['timed'] = $timed;
+    }
+
     public function testShipmentResponseSuccess()
     {
         $tracking = str_pad(rand(0, 999999), 6, 0);
