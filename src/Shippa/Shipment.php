@@ -92,6 +92,10 @@ abstract class Shipment
         if (!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["address_3"])) {
             $data["address_3"] =  $data["county"];
         }
+
+        foreach ($data as $k => $field) {
+            $data[$k] = trim($field);
+        }
         $this->collection = $data;
     }
 
@@ -99,6 +103,10 @@ abstract class Shipment
     {
         if (!empty($data["country_code"]) && $data["country_code"] == "IE" && empty($data["address_3"])) {
             $data["address_3"] =  $data["county"];
+        }
+
+        foreach ($data as $k => $field) {
+            $data[$k] = trim($field);
         }
         $this->delivery = $data;
     }
