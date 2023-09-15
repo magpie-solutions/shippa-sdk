@@ -138,7 +138,7 @@ class Parceluk extends Shipment
             return ['tracking_number' => $this->tracking_number];
         }
 
-        $jsonData = json_encode([]);
+        $jsonData = json_encode($data);
 
         if ($this->return_test_success) {
             $obj =  json_decode($this->testShipmentCancelSuccess());
