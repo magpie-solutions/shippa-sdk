@@ -76,6 +76,11 @@ class Dsv extends Shipment
         $this->service['timed'] = $timed;
     }
 
+    public function setCustomsSignature($signature = '')
+    {
+        $this->customs_data = array_merge($this->customs_data, ['signature' => $signature]);
+    }
+
     public function testShipmentResponseSuccess()
     {
         $tracking = str_pad(rand(0, 9999), 4, 0);
