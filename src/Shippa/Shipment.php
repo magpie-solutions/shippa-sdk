@@ -321,6 +321,11 @@ abstract class Shipment
         $this->label_format = $format;
     }
 
+    public function setSignature($type)
+    {
+        $this->service['signature'] = $type;
+    }
+
     public function doShipmentCreate()
     {
         if (!$this->url) {
