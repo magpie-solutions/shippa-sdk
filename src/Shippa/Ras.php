@@ -52,7 +52,9 @@ class Ras
         curl_close($c);
         $this->ras_fetch = true;
         $ras = json_decode($ret);
-
+        if (!is_array($ras)) {
+            return;
+        }
         if ("none" !== $ras[0]) {
             $this->ras_type = $ras[0];
             foreach ($ras[1] as $carrier_data) {
