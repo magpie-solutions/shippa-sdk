@@ -30,11 +30,11 @@ class Locations
             'Content-Type: application/json'
         ];
 
-        if ($this->unique_id != null) {
-            $headers[] = 'unique-id: ' . $this->unique_id;
+        if ($unique_id != null) {
+            $headers[] = 'unique-id: ' . $unique_id;
         }
 
-        $url = $this->url . strtolower($this->carrier) . '/locations/' . $country_code . '/' . $postcode;
+        $url = rtrim($this->url, '/') . '/' . strtolower($carrier) . '/locations/' . $country_code . '/' . $postcode;
         $c = curl_init();
         curl_setopt($c, CURLOPT_URL, $url);
         curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
