@@ -19,8 +19,8 @@ class Ras
         /// url
         if ($api_url) {
             $this->url = $api_url;
-        } else if (defined('SHIPPA_API_URL')) {
-            $this->url = SHIPPA_API_URL;
+        } else {
+            throw new \Exception('Shippa API URL not set');
         }
     }
 
