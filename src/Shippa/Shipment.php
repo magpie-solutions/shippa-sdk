@@ -276,6 +276,16 @@ abstract class Shipment
         $this->customs_data['clearance_info'] = $clearanceInfo;
     }
 
+    protected function setCustomsExporterUkims($ukims)
+    {
+        $this->customs_data['exporter_ukims'] = $ukims;
+    }
+
+    protected function setCustomsImporterUkims($ukims)
+    {
+        $this->customs_data['importer_ukims'] = $ukims;
+    }
+
     public function setCustomsExporter($exporter)
     {
         $this->customs_data['exporter'] = $exporter;
