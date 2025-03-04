@@ -286,7 +286,7 @@ abstract class Shipment
         $this->customs_data['importer_ukims'] = $ukims;
     }
 
-    public function setEuropeAtRisk($atRisk)
+    public function setCustomsEuropeAtRisk($atRisk)
     {
         $this->customs_data['europe_at_risk'] = $atRisk;
     }
