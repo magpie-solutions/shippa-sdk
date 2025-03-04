@@ -276,17 +276,17 @@ abstract class Shipment
         $this->customs_data['clearance_info'] = $clearanceInfo;
     }
 
-    protected function setCustomsExporterUkims($ukims)
+    public function setCustomsExporterUkims($ukims)
     {
         $this->customs_data['exporter_ukims'] = $ukims;
     }
 
-    protected function setCustomsImporterUkims($ukims)
+    public function setCustomsImporterUkims($ukims)
     {
         $this->customs_data['importer_ukims'] = $ukims;
     }
 
-    protected function setEuropeAtRisk($atRisk)
+    public function setEuropeAtRisk($atRisk)
     {
         $this->customs_data['europe_at_risk'] = $atRisk;
     }
